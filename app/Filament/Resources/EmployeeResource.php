@@ -7,6 +7,7 @@ use App\Filament\Resources\EmployeeResource\RelationManagers;
 use App\Models\City;
 use App\Models\Employee;
 use App\Models\State;
+use DeepCopy\Filter\Filter;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -17,6 +18,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Infolists\Components\Section;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
@@ -59,6 +62,7 @@ class EmployeeResource extends Resource
                             ->native(false),
                         Forms\Components\Select::make('state_id')
                             ->required()
+                            ->label('State')
                             ->searchable()
                             ->preload()
                             ->live()
@@ -70,6 +74,7 @@ class EmployeeResource extends Resource
                         Forms\Components\Select::make('city_id')
                             ->required()
                             ->searchable()
+                            ->label('City')
                             ->live()
                             ->preload()
                             ->options(fn (Get $get): Collection => City::query()
@@ -159,10 +164,15 @@ class EmployeeResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-            ])
+                SelectFilter::make('country_id')->searchable()->preload()->relationship('country', titleAttribute: 'name')->label('Country'),
+                SelectFilter::make('state_id')->relationship('state', titleAttribute: 'name')->label('State'),
+                SelectFilter::make('city_id')->relationship('city', titleAttribute: 'name')->label('City'),
+            ], FiltersLayout::AboveContentCollapsible)->filtersFormColumns(4)
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->successNotificationTitle('Employee  Deleted Successfully'),
             ])
             ->defaultSort('first_name', 'desc')
             ->bulkActions([
@@ -173,6 +183,17 @@ class EmployeeResource extends Resource
                 ]),
             ]);
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('team_id', auth()->user()->team_id)->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 10 ? 'warning' : 'primary';
+    }
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist

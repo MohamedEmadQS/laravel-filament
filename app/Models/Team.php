@@ -5,20 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class Team extends Model
 {
     use HasFactory;
-    protected $fillable = [
+
+    protected $fillable=[
         'name',
+        'slug',
     ];
 
-    public function states()
-    {
-        return $this->hasMany(State::class);
-    }
-
-    public function employees()
-    {
+    public function employees(){
         return $this->hasMany(Employee::class);
+    }
+    public function members(){
+        return $this->belongsToMany(User::class);
     }
 }

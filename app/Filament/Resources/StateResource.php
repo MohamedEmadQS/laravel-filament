@@ -24,6 +24,16 @@ class StateResource extends Resource
     protected static ?string $slug = 'state';
     protected static ?int $navigationSort = 2;
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+    
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 10 ? 'warning' : 'primary';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -32,7 +42,7 @@ class StateResource extends Resource
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->relationship('country',titleAttribute:'name')
+                    ->relationship('country', titleAttribute: 'name')
                     ->native(false),
                 Forms\Components\TextInput::make('name')
                     ->required()

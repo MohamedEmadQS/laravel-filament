@@ -26,16 +26,24 @@ class CityResource extends Resource
     protected static ?int $navigationSort = 3;
 
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 10 ? 'warning' : 'primary';
+    }
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('state_id')
-                ->required()
-                ->searchable()
-                ->preload()
-                ->relationship('state',titleAttribute:'name')
-                ->native(false),
+                    ->required()
+                    ->searchable()
+                    ->preload()
+                    ->relationship('state', titleAttribute: 'name')
+                    ->native(false),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -46,8 +54,9 @@ class CityResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('state_id')
+                Tables\Columns\TextColumn::make('state.name')
                     ->numeric()
+                    ->label('State')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),

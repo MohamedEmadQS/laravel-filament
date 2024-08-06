@@ -21,4 +21,8 @@ class Country extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    public function team(){
+        return $this->belongsTo(Team::class);
+    }
 }

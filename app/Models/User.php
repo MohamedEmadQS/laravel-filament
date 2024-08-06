@@ -64,4 +64,9 @@ class User extends Authenticatable implements HasTenants
     {
         return $this->teams()->whereKey($tenant)->exists();
     }
+
+    public function currentTeam()
+    {
+        return $this->belongsToMany(Team::class, 'team_user');
+    }
 }

@@ -7,6 +7,7 @@ use App\Filament\Resources\CountryResource\RelationManagers;
 use App\Filament\Resources\CountryResource\RelationManagers\EmployeesRelationManager;
 use App\Filament\Resources\CountryResource\RelationManagers\StatesRelationManager;
 use App\Models\Country;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -26,11 +27,12 @@ class CountryResource extends Resource
     protected static ?string $slug = 'country';
     protected static ?int $navigationSort = 1;
 
+
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::where('team_id', Filament::getTenant()->id)->count();
     }
-    
+
     public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::count() > 10 ? 'warning' : 'primary';

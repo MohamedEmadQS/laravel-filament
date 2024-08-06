@@ -20,4 +20,19 @@ class Team extends Model
     public function members(){
         return $this->belongsToMany(User::class);
     }
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
+
+    public function states(){
+        return $this->hasMany(State::class);
+    }
+
+    public function countries(){
+        return $this->hasMany(Country::class);
+    }
+
+    public function cities(){
+        return $this->hasMany(City::class);
+    }
 }

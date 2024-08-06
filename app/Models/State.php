@@ -13,7 +13,11 @@ class State extends Model
         'country_id'
     ];
 
-    public function Country(){
+    public function country(){
         return $this->belongsTo(Country::class);
+    }
+
+    public function team(){
+        return $this->belongsTo(Team::class);
     }
 }

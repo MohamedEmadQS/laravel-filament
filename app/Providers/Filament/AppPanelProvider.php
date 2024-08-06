@@ -8,6 +8,7 @@ use App\Models\Team;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -28,6 +29,8 @@ class AppPanelProvider extends PanelProvider
         return $panel
             ->id('app')
             ->path('app')
+            ->login()
+            ->profile()
             ->colors([
                 'danger' => Color::Amber,
                 'gray' => Color::Gray,
@@ -35,6 +38,12 @@ class AppPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                ->label('Dashboard')
+                ->url('/admin')
+                ->icon('heroicon-o-home'),
             ])
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')

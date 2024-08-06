@@ -123,8 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'providers' => [
-        Filament\FilamentServiceProvider::class,
-    ],
 
 ];
